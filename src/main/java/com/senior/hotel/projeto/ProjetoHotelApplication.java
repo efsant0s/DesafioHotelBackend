@@ -1,4 +1,4 @@
-package com.senior.hotel.ProjetoHotel;
+package com.senior.hotel.projeto;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
