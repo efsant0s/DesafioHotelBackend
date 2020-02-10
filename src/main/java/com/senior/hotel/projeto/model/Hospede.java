@@ -5,7 +5,9 @@
  */
 package com.senior.hotel.projeto.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 
 /**
@@ -25,6 +27,17 @@ public class Hospede implements Serializable {
     private String documento;
 
     private String telefone;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospede")
+    private List<Checkin> listaCheckIn;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -42,14 +55,6 @@ public class Hospede implements Serializable {
         this.documento = documento;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTelefone() {
         return telefone;
     }
@@ -58,6 +63,14 @@ public class Hospede implements Serializable {
         this.telefone = telefone;
     }
 
+    public List<Checkin> getListaCheckIn() {
+        return listaCheckIn;
+    }
+
+    public void setListaCheckIn(List<Checkin> listaCheckIn) {
+        this.listaCheckIn = listaCheckIn;
+    }
+    
     @Override
     public String toString() {
         return "Hospede{" + "id=" + id + ", nome=" + nome + ", documento=" + documento + ", telefone=" + telefone + '}';

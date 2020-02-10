@@ -64,7 +64,7 @@ public class HospedeController {
             String nome = valorBusca;
             String documento = valorBusca;
             String telefone = valorBusca;
-            return HospedeRepository.findByCollumn(nome, documento, telefone, pageable);
+            return HospedeRepository.findByNomeContainingIgnoreCaseOrDocumentoContainingIgnoreCaseOrTelefoneContainingIgnoreCase(nome, documento, telefone, pageable);
         }
         return null;
     }
