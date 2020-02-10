@@ -41,7 +41,7 @@ public class CheckInController {
         return checkInRepository.findAll(pageable);
     }
 
-    @PostMapping("/checkin")
+    @PostMapping("/checkin/post")
     public Checkin createCheckin(@Valid @RequestBody Checkin checkIn) {
         if (checkIn.getHospede() != null && checkIn.getHospede().getId() == null) {
             Hospede hosp = checkIn.getHospede();
@@ -57,6 +57,32 @@ public class CheckInController {
         }
         setValorDiaria(checkIn);
         return checkInRepository.save(checkIn);
+    }
+
+    @GetMapping("/checkin/open")
+    public Page<Checkin> reservasAbertas(Pageable pageable) throws ParseException {
+        Page<Checkin> checkins = checkInRepository.findByDataSaidaIsNull(pageable);
+        if (checkins.getSize() > 0) {
+            for (Checkin check : checkins) {
+                if (!(check.getValor() > 0)) {
+                    check.setValor(this.calcularValor(check.getDataEntrada(), new Date(), check.getAdicionalVeiculo()));
+                }
+            }
+        }
+        return checkins;
+    }
+
+    @GetMapping("/checkin/closed")
+    public Page<Checkin> reservasFechadas(Pageable pageable) throws ParseException {
+        Page<Checkin> checkins = checkInRepository.findByDataSaidaIsNotNull(pageable);
+        if (checkins.getSize() > 0) {
+            for (Checkin check : checkins) {
+                if (!(check.getValor() > 0)) {
+                    check.setValor(this.calcularValor(check.getDataEntrada(), check.getDataSaida(), check.getAdicionalVeiculo()));
+                }
+            }
+        }
+        return checkins;
     }
 
     private void setValorDiaria(Checkin checkIn) {

@@ -9,6 +9,8 @@ package com.senior.hotel.projeto.repository;
 import com.senior.hotel.projeto.model.Checkin;
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository; 
 
@@ -17,4 +19,8 @@ public interface CheckInRepository extends JpaRepository<Checkin, Long> {
  	List<Checkin> findByDataEntrada(Date dataEntrada);
 	List<Checkin> findByDataSaida(Date dataSaida);
 	List<Checkin> findByHospedeId(Long hospedeId);
+
+    public Page<Checkin> findByDataSaidaIsNull(Pageable pageable);
+
+    public Page<Checkin> findByDataSaidaIsNotNull(Pageable pageable);
 }
