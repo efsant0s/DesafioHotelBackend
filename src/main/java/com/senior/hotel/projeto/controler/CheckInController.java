@@ -45,22 +45,18 @@ public class CheckInController {
     public Checkin createCheckin(@Valid @RequestBody Checkin checkIn) {
         if (checkIn.getHospede() != null && checkIn.getHospede().getId() == null) {
             Hospede hosp = checkIn.getHospede();
-            if (hosp.getNome() != null && !hosp.getNome().isEmpty()) {
-                Hospede hospede = hospedeRepository.findOneByNomeContainingIgnoreCase(hosp.getNome());
-                if (hospede == null) {
-                    hospede = hospedeRepository.save(checkIn.getHospede());
-
-                }
-                checkIn.setHospede(hospede);
+            Hospede hospede = hospedeRepository.findOneByNomeContainingIgnoreCaseOrDocumentoContainingIgnoreCaseOrTelefoneContainingIgnoreCase(hosp.getNome(), hosp.getDocumento(), hosp.getTelefone());
+            if (hospede == null) {
+                hospede = hospedeRepository.save(checkIn.getHospede());
             }
-
+            checkIn.setHospede(hospede);
         }
         setValorDiaria(checkIn);
         return checkInRepository.save(checkIn);
     }
 
     @GetMapping("/checkin/open")
-    public Page<Checkin> reservasAbertas(Pageable pageable) throws ParseException {
+    public Page<Checkin> hospedePresentes(Pageable pageable) throws ParseException {
         Page<Checkin> checkins = checkInRepository.findByDataSaidaIsNull(pageable);
         if (checkins.getSize() > 0) {
             for (Checkin check : checkins) {
@@ -73,7 +69,7 @@ public class CheckInController {
     }
 
     @GetMapping("/checkin/closed")
-    public Page<Checkin> reservasFechadas(Pageable pageable) throws ParseException {
+    public Page<Checkin> hospedesNaoPresentes(Pageable pageable) throws ParseException {
         Page<Checkin> checkins = checkInRepository.findByDataSaidaIsNotNull(pageable);
         if (checkins.getSize() > 0) {
             for (Checkin check : checkins) {

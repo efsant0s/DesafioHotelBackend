@@ -18,5 +18,5 @@ public interface HospedeRepository extends JpaRepository<Hospede, Long> {
 
     Page<Hospede> findByNomeContainingIgnoreCaseOrDocumentoContainingIgnoreCaseOrTelefoneContainingIgnoreCase(String nome, String documento, String telefone, Pageable pageable);
 
-    Hospede findOneByNomeContainingIgnoreCase(String nome); 
+    Hospede findOneByNomeContainingIgnoreCaseOrDocumentoContainingIgnoreCaseOrTelefoneContainingIgnoreCase(String nome, String documento, String telefone); 
 }
